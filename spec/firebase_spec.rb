@@ -7,16 +7,16 @@ describe "Firebase" do
 
   describe "invalid uri" do
     it "should raise on http" do
-      expect{ Firebase::Client.new('http://test.firebaseio.com') }.to raise_error(ArgumentError)
+      expect{ Firebase::Client.new('http://test.firebaseio.com', 'secret') }.to raise_error(ArgumentError)
     end
 
     it 'should raise on empty' do
-      expect{ Firebase::Client.new('') }.to raise_error(ArgumentError)
+      expect{ Firebase::Client.new('', 'secret') }.to raise_error(ArgumentError)
     end
   end
 
   before do
-    @firebase = Firebase::Client.new('https://test.firebaseio.com')
+    @firebase = Firebase::Client.new('https://test.firebaseio.com', 'secret')
   end
 
   describe "set" do
@@ -122,11 +122,11 @@ describe "Firebase" do
     it "sends custom auth" do
       firebase = Firebase::Client.new('https://test.firebaseio.com', 'secret')
       expect(firebase.request).to receive(:request).with(:get, "todos.json", {
-        :body => nil,
-        :query => {:auth => "secret", :foo => 'bar'},
-        :follow_redirect => true
+        body: nil,
+        query: {access_token: "secret", foo: 'bar'},
+        follow_redirect: true
       })
-      firebase.get('todos', :foo => 'bar')
+      firebase.get('todos', foo: 'bar')
     end
   end
 end

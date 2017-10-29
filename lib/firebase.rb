@@ -11,7 +11,7 @@ module Firebase
   class Client
     attr_accessor :access_token, :request
 
-    def initialize(base_uri, access_token)
+    def initialize(base_uri, access_token = nil)
       if base_uri !~ URI::regexp(%w(https))
         raise ArgumentError.new('base_uri must be a valid https uri')
       end
@@ -66,7 +66,7 @@ module Firebase
     def process(verb, path, data=nil, query={})
       Firebase::Response.new @request.request(verb, "#{path}.json", {
         :body             => (data && data.to_json),
-        :query            => { :access_token => @access_token }.merge(query),
+        :query            => (@access_token ? { access_token: @access_token }.merge(query) : query),
         :follow_redirect  => true
       })
     end
