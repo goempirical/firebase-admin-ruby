@@ -16,12 +16,10 @@ module Firebase
         raise ArgumentError.new('base_uri must be a valid https uri')
       end
       base_uri += '/' unless base_uri.end_with?('/')
-      @request = HTTPClient.new({
-        :base_url => base_uri,
-        :default_header => {
-          'Content-Type' => 'application/json'
-        }
-      })
+      headers = { 'Content-Type' => 'application/json' }.merge(
+        access_token ? { 'Authorization' => "Bearer #{access_token}" } : {}
+      )
+      @request = HTTPClient.new(base_url: base_uri, default_header: headers)
       @access_token = access_token
     end
 

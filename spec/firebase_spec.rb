@@ -119,7 +119,7 @@ describe "Firebase" do
   end
 
   describe "http processing" do
-    it "sends custom auth" do
+    it "does not send token in query params" do
       firebase = Firebase::Client.new('https://test.firebaseio.com', 'secret')
       expect(firebase.request).to receive(:request).with(:get, "todos.json", {
         body: nil,
@@ -127,6 +127,15 @@ describe "Firebase" do
         follow_redirect: true
       })
       firebase.get('todos', foo: 'bar')
+    end
+
+    it "sends token in Authorization header" do
+      firebase = Firebase::Client.new('https://test.firebaseio.com', 'secret')
+      allow(firebase.request).to receive(:request) do |params|
+        @headers = firebase.request.default_header
+      end
+      firebase.get('todos', :foo => 'bar')
+      expect(@headers['Authorization']).to eq 'Bearer secret'
     end
   end
 end
