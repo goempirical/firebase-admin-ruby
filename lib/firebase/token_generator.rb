@@ -1,3 +1,5 @@
+require 'jwt'
+
 module Firebase
   class TokenGenerator
     attr_accessor :service_account

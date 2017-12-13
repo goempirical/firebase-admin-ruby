@@ -7,11 +7,11 @@ module Firebase
     end
 
     def private_key
-      @service_account["private_key"]
+      @service_account[:private_key]
     end
 
     def client_email
-      @service_account["client_email"]
+      @service_account[:client_email]
     end
   end
 end
