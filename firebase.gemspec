@@ -47,6 +47,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<httpclient>, [">= 0"])
   s.add_runtime_dependency(%q<json>, [">= 0"])
   s.add_runtime_dependency(%q<jwt>, [">= 0"])
+  s.add_runtime_dependency(%q<rest-client>, [">= 0"])
   s.add_development_dependency(%q<rake>, [">= 0"])
   s.add_development_dependency(%q<rdoc>, [">= 0"])
   s.add_development_dependency(%q<rspec>, [">= 0"])
