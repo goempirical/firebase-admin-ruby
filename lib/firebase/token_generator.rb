@@ -1,3 +1,6 @@
+require 'rest-client'
+require 'jwt'
+
 module Firebase
   class TokenGenerator
     attr_accessor :service_account
@@ -16,9 +19,8 @@ module Firebase
 
     private
 
-    def generate_custom_token
-      "todo"
-    end
+    # TODO
+    def generate_custom_token; end
 
     # The tokens generated here are the ones we can use from the server to talk to firebase
     # this is the recommended way from google to authenticate to Firebase
@@ -26,9 +28,9 @@ module Firebase
     def generate_access_token
       payload = access_token_payload
       private_key = OpenSSL::PKey::RSA.new(@service_account.private_key)
-      request_token = JWT.encode(payload, private_key, "RS256")
+      request_token = JWT.encode(payload, private_key, 'RS256')
 
-      response = RestClient.post "https://www.googleapis.com/oauth2/v4/token", { :grant_type => "urn:ietf:params:oauth:grant-type:jwt-bearer", :assertion => request_token}
+      response = RestClient.post 'https://www.googleapis.com/oauth2/v4/token', grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer', assertion: request_token
       JSON.parse(response)['access_token']
     end
 
@@ -36,11 +38,11 @@ module Firebase
       service_account_email = @service_account.client_email
       now_seconds = Time.now.to_i
       {
-        :iss => service_account_email,
-        :scope => "https://www.googleapis.com/auth/firebase.database https://www.googleapis.com/auth/userinfo.email",
-        :iat => now_seconds,
-        :exp => now_seconds + 1.hour.to_i, # Maximum expiration time is one hour
-        :aud => "https://www.googleapis.com/oauth2/v4/token"
+        iss: service_account_email,
+        scope: 'https://www.googleapis.com/auth/firebase.database https://www.googleapis.com/auth/userinfo.email',
+        iat: now_seconds,
+        exp: now_seconds + 1.hour.to_i, # Maximum expiration time is one hour
+        aud: 'https://www.googleapis.com/oauth2/v4/token'
       }
     end
   end
